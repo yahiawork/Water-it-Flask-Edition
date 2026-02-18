@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% set header_title = 'Plants' %}
+{% set active_tab = 'plants' %}
+
+{% block topbar_actions %}
+  <a class="icon-pill" href="{{ url_for('plants.add_plant') }}" aria-label="Add">+</a>
+{% endblock %}
+
+{% block content %}
+  <div class="view-tabs">
+    <a class="tab {% if view=='single' %}active{% endif %}" href="{{ url_for('plants.list_plants', view='single') }}">Single</a>
+    <a class="tab {% if view=='grid' %}active{% endif %}" href="{{ url_for('plants.list_plants', view='grid') }}">Grid</a>
+    <a class="tab {% if view=='list' %}active{% endif %}" href="{{ url_for('plants.list_plants', view='list') }}">List</a>
+  </div>
+
+  {% if not plants %}
+    <div class="card empty-card">
+      <div class="muted">No plants yet. Add your first one.</div>
+      <a class="btn" href="{{ url_for('plants.add_plant') }}">Add Plant</a>
+    </div>
+  {% else %}
+
+    {% if view == 'list' %}
+      <div class="list">
+        {% for p in plants %}
+          <a class="list-row" href="{{ url_for('plants.detail', plant_id=p.id) }}">
+            <div class="thumb">
+              {% if p.photos %}
+                <img src="{{ url_for('static', filename='uploads/' ~ p.photos[0].filename) }}" alt="{{ p.name }}">
+              {% else %}
+                <div class="thumb-fallback">🌿</div>
+              {% endif %}
+            </div>
+            <div class="list-meta">
+              <div class="list-title">{{ p.name }}</div>
+              <div class="muted">{{ p.light or '—' }} • {{ p.water or '—' }}</div>
+            </div>
+            <div class="chev">›</div>
+          </a>
+        {% endfor %}
+      </div>
+
+    {% elif view == 'single' %}
+      <div class="single-stack">
+        {% for p in plants %}
+          <a class="card plant-card" href="{{ url_for('plants.detail', plant_id=p.id) }}">
+            <div class="plant-image">
+              {% if p.photos %}
+                <img src="{{ url_for('static', filename='uploads/' ~ p.photos[0].filename) }}" alt="{{ p.name }}">
+              {% else %}
+                <div class="img-fallback">Add a photo</div>
+              {% endif %}
+            </div>
+            <div class="plant-name">{{ p.name }}</div>
+            <div class="muted">{{ p.light or '—' }} • {{ p.water or '—' }}</div>
+          </a>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="grid">
+        {% for p in plants %}
+          <a class="card plant-card" href="{{ url_for('plants.detail', plant_id=p.id) }}">
+            <div class="plant-image">
+              {% if p.photos %}
+                <img src="{{ url_for('static', filename='uploads/' ~ p.photos[0].filename) }}" alt="{{ p.name }}">
+              {% else %}
+                <div class="img-fallback">Add a photo</div>
+              {% endif %}
+            </div>
+            <div class="plant-name">{{ p.name }}</div>
+            <div class="muted">{{ p.light or '—' }} • {{ p.water or '—' }}</div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  {% endif %}
+{% endblock %}

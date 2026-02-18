@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% set header_title = 'Edit Plant' %}
+{% set active_tab = 'plants' %}
+
+{% block content %}
+  <div class="card">
+    <form method="post" enctype="multipart/form-data" class="form">
+      {{ form.hidden_tag() }}
+
+      <div class="form-row">
+        <label>{{ form.name.label }}</label>
+        {{ form.name(class_='input') }}
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label>{{ form.scientific_name.label }}</label>
+          {{ form.scientific_name(class_='input') }}
+        </div>
+        <div>
+          <label>{{ form.age_months.label }}</label>
+          {{ form.age_months(class_='input') }}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>{{ form.origin.label }}</label>
+        {{ form.origin(class_='input') }}
+      </div>
+
+      <div class="form-row two">
+        <div>
+          <label>{{ form.light.label }}</label>
+          {{ form.light(class_='input') }}
+        </div>
+        <div>
+          <label>{{ form.water.label }}</label>
+          {{ form.water(class_='input') }}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>{{ form.soil.label }}</label>
+        {{ form.soil(class_='input') }}
+      </div>
+
+      <div class="form-row">
+        <label>{{ form.notes.label }}</label>
+        {{ form.notes(class_='textarea') }}
+      </div>
+
+      <div class="form-row">
+        <label>Add more photos</label>
+        <input class="input" type="file" name="photos" accept="image/*" multiple onchange="previewFiles(this)">
+        <div class="photo-preview" id="preview"></div>
+      </div>
+
+      <button class="btn primary" type="submit">Save</button>
+      <a class="btn" href="{{ url_for('plants.detail', plant_id=plant.id) }}">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

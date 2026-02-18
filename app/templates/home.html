@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% set header_title = 'Home' %}
+{% set active_tab = 'home' %}
+
+{% block content %}
+  <section class="card weather-card">
+    <div class="card-title">Today's<br><span class="script">Weather</span></div>
+    <div class="weather-meta">
+      <div class="pill"><span class="dot"></span> {{ weather.city }}{% if weather.country %}, {{ weather.country }}{% endif %}</div>
+      <div class="muted">Using a saved city</div>
+    </div>
+
+    {% if weather.ok and weather.slots %}
+      <div class="weather-slots">
+        {% for s in weather.slots %}
+          <div class="weather-slot">
+            <div class="slot-label">{{ s.label }}</div>
+            <img class="slot-icon" src="{{ url_for('static', filename=s.icon) }}" alt="weather">
+            <div class="slot-temp">{{ s.temp }}°C</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted" style="margin-top:12px">
+        Weather is not available. {{ error or '' }}
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">Reminders</div>
+    </div>
+
+    {% if reminder_cards %}
+      {% for r in reminder_cards %}
+        <a class="card reminder-card" href="{{ url_for('plants.detail', plant_id=r.plant_id) }}">
+          <div class="rem-top">
+            <div class="rem-name">{{ r.plant_name }}</div>
+            <div class="rem-chip"><span class="leaf"></span> {{ r.interval }}</div>
+          </div>
+          <div class="rem-time">{{ r.time }}</div>
+        </a>
+      {% endfor %}
+    {% else %}
+      <div class="card empty-card">
+        <div class="muted">No reminders yet. Add one from a plant page.</div>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

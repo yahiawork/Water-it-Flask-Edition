@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% set header_title = plant.name %}
+{% set active_tab = 'plants' %}
+
+{% block topbar_actions %}
+  <a class="icon-pill" href="{{ url_for('plants.edit', plant_id=plant.id) }}" aria-label="Edit">✎</a>
+{% endblock %}
+
+{% block content %}
+  <div class="card hero">
+    <div class="hero-image">
+      {% if plant.photos %}
+        <div class="photo-strip">
+          {% for ph in plant.photos %}
+            <div class="photo-item">
+              <img src="{{ url_for('static', filename='uploads/' ~ ph.filename) }}" alt="photo">
+              <form method="post" action="{{ url_for('plants.delete_photo', photo_id=ph.id) }}" class="inline">
+                {{ csrf_token() }}
+                <button class="mini danger" type="submit" title="Delete photo">×</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="img-fallback big">No photo yet</div>
+      {% endif %}
+
+      <form class="upload-bar" method="post" action="{{ url_for('plants.add_photos', plant_id=plant.id) }}" enctype="multipart/form-data">
+        {{ csrf_token() }}
+        <input class="input" type="file" name="photos" accept="image/*" multiple required>
+        <button class="btn" type="submit">Upload</button>
+      </form>
+    </div>
+
+    <div class="hero-title">{{ plant.name }}</div>
+    <div class="muted">{{ plant.scientific_name or '' }}</div>
+
+    <div class="chips">
+      {% if plant.light %}<span class="chip">☀️ {{ plant.light }}</span>{% endif %}
+      {% if plant.water %}<span class="chip">💧 {{ plant.water }}</span>{% endif %}
+      {% if plant.soil %}<span class="chip">🪴 {{ plant.soil }}</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title">Overview</div>
+      <div class="kv">
+        <div class="k">Origin</div><div class="v">{{ plant.origin or '—' }}</div>
+        <div class="k">Age</div><div class="v">{% if plant.age_months is not none %}{{ plant.age_months }} months{% else %}—{% endif %}</div>
+        <div class="k">Scientific</div><div class="v">{{ plant.scientific_name or '—' }}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Core</div>
+      <div class="kv">
+        <div class="k">Light</div><div class="v">{{ plant.light or '—' }}</div>
+        <div class="k">Water</div><div class="v">{{ plant.water or '—' }}</div>
+        <div class="k">Soil</div><div class="v">{{ plant.soil or '—' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Notes</div>
+    {% if plant.notes %}
+      <div class="note">{{ plant.notes|e|replace('\n','<br>')|safe }}</div>
+    {% else %}
+      <div class="muted">No notes yet.</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="section-title">Reminders</div>
+
+    <div class="reminders">
+      {% for rem in plant.reminders %}
+        <div class="rem-row">
+          <div>
+            <div class="rem-interval">{{ rem.interval_text }}</div>
+            <div class="muted">
+              {{ rem.time_of_day }}
+              {% if rem.next_run_at %}
+                · Next: {{ rem.next_run_at.strftime('%Y-%m-%d %H:%M') }} UTC
+              {% endif %}
+            </div>
+          </div>
+          <form method="post" action="{{ url_for('plants.delete_reminder', reminder_id=rem.id) }}">
+            {{ csrf_token() }}
+            <button class="btn small danger" type="submit">Delete</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="muted">No reminders yet.</div>
+      {% endfor %}
+    </div>
+
+    <div class="divider"></div>
+
+    <form method="post" class="form compact">
+      {{ reminder_form.hidden_tag() }}
+      <input type="hidden" name="form_name" value="reminder">
+      <div class="form-row two">
+        <div>
+          <label>Interval</label>
+          {{ reminder_form.interval_text(class_='input', placeholder='2 weeks') }}
+        </div>
+        <div>
+          <label>Time</label>
+          {{ reminder_form.time_of_day(class_='input', placeholder='09:00') }}
+        </div>
+      </div>
+      <button class="btn primary" type="submit">Add Reminder</button>
+    </form>
+  </div>
+
+  <form method="post" action="{{ url_for('plants.delete', plant_id=plant.id) }}" onsubmit="return confirm('Delete this plant?');" style="margin-bottom: 84px;">
+    {{ csrf_token() }}
+    <button class="btn danger" type="submit">Delete Plant</button>
+  </form>
+{% endblock %}

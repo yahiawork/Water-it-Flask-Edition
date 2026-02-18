@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% set header_title = 'Settings' %}
+{% set active_tab = 'settings' %}
+
+{% block content %}
+  <div class="card">
+    <div class="section-title">Weather</div>
+    <form method="post" class="form">
+      {{ csrf_token() }}
+      <div class="form-row">
+        <label>Default city</label>
+        <input class="input" name="default_city" value="{{ settings.default_city }}" placeholder="San Francisco">
+      </div>
+      <button class="btn primary" type="submit">Save</button>
+    </form>
+
+    <div class="divider"></div>
+
+    <div class="section-title">OpenWeather API</div>
+    <div class="muted">
+      To enable live weather, set <code>OPENWEATHER_API_KEY</code> in <code>.env</code>.
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">Notifications (Web Push)</div>
+    <div class="muted">
+      Works on <b>https</b> (or <code>http://localhost</code>). Turn it on to receive reminder notifications.
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn" type="button" id="btnEnablePush">Enable notifications</button>
+      <button class="btn" type="button" id="btnDisablePush">Disable notifications</button>
+    </div>
+    <div id="pushStatus" class="muted" style="margin-top:10px;"></div>
+  </div>
+{% endblock %}

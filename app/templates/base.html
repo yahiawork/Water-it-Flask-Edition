@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or 'Water It' }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='assets/app_icons/web/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="icon-btn" type="button" aria-label="Menu" onclick="toggleDrawer()">
+        <span class="burger"></span>
+      </button>
+      <div class="topbar-title">{{ header_title or 'Home' }}</div>
+      <div class="topbar-actions">
+        {% block topbar_actions %}{% endblock %}
+      </div>
+    </header>
+
+    <aside class="drawer" id="drawer">
+      <div class="drawer-header">Water It</div>
+      <nav class="drawer-nav">
+        <a class="drawer-link" href="{{ url_for('home.index') }}">Home</a>
+        <a class="drawer-link" href="{{ url_for('plants.list_plants') }}">Plants</a>
+        <a class="drawer-link" href="{{ url_for('plants.add_plant') }}">Add Plant</a>
+        <a class="drawer-link" href="{{ url_for('settings.index') }}">Settings</a>
+      </nav>
+      <div class="drawer-footer">
+        <div class="muted">Tip: set <b>OPENWEATHER_API_KEY</b> in <code>.env</code>.</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="toasts">
+            {% for category, message in messages %}
+              <div class="toast toast-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <nav class="bottom-nav">
+      <a class="nav-item {% if active_tab=='home' %}active{% endif %}" href="{{ url_for('home.index') }}">
+        <span class="nav-dot"></span>
+        <span>Home</span>
+      </a>
+      <a class="nav-item {% if active_tab=='plants' %}active{% endif %}" href="{{ url_for('plants.list_plants') }}">
+        <span class="nav-dot"></span>
+        <span>Plants</span>
+      </a>
+      <a class="nav-item {% if active_tab=='add' %}active{% endif %}" href="{{ url_for('plants.add_plant') }}">
+        <span class="nav-dot"></span>
+        <span>Add Plant</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
