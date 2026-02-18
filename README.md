@@ -5,6 +5,20 @@ Built with Flask while preserving the original design system and UI philosophy.
 
 ------------------------------------------------------------
 
+## Tech Stack
+
+| Category | Technology |
+|---|---|
+| Framework | Flask / Python |
+| Local Storage | SQLite (sqflite) |
+| Notifications | Web Push (pywebpush) |
+| Weather | OpenWeather API |
+| Location | Browser Geolocation API |
+| Localization | Flask-Babel (i18n) |
+| Frontend | HTML / CSS / JavaScript |
+
+------------------------------------------------------------
+
 ## Overview
 
 Water It Web is a fully responsive browser-based version of the original Flutter mobile application.
@@ -68,9 +82,9 @@ All design credits belong to the original creator.
 
 ## Installation
 
-git clone https://github.com/yahiawork/Water-it-Flask-Edition-.git
+git clone https://github.com/yahiawork/Water-it-Flask-Edition.git
 ```
-cd Water-it-Flask-Edition-
+cd Water-it-Flask-Edition
 ```
 ```
 python -m venv venv
