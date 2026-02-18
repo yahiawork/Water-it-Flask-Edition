@@ -65,31 +65,37 @@ All design credits belong to the original creator.
 ## Installation
 
 git clone https://github.com/yahiawork/Water-it-Flask-Edition-.git
+```
 cd Water-it-Flask-Edition-
-
+```
+```
 python -m venv venv
-
+```
 Windows:
+```
 venv\Scripts\activate
-
+```
 Linux / macOS:
+```
 source venv/bin/activate
-
+```
+```
 pip install -r requirements.txt
 python run.py
-
+```
 Open in browser:
+```
 http://127.0.0.1:5000
-
+```
 ------------------------------------------------------------
 
 ## Weather API Setup
 
-Create a .env file in the root directory:
-
+ - Create a .env file in the root directory:
+```
 OPENWEATHER_API_KEY=your_api_key_here
 DEFAULT_CITY=Fes
-
+```
 Get a free API key from:
 https://openweathermap.org/
 
@@ -125,7 +131,6 @@ Designed to preserve the original mobile app feel inside a web environment.
 Original Flutter design and concept:
 
 kingdrofd
-
 https://github.com/kingdrofd/water_it
 
 
